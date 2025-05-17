@@ -136,9 +136,8 @@ function PANEL:PerformLayout()
 	local cx, cy = chat.GetChatBoxPos()
 
 	self:SetPos(0, 0)
-	self:SetSize(ScrW(), ScrH())
+	self:SetSize(ScrW() - cx, ScrH())
 
-	-- Set Canvas to full height, width minus 500px (250px margin each side)
 	local margin = 250
 	self.Canvas:SetPos(margin, 0)
 	self.Canvas:SetSize(ScrW() - margin * 2, ScrH())
@@ -302,7 +301,7 @@ function PANEL:SetMaps(maps)
 
 		button:SetDrawBackground(false)
 		button:SetTall(120)
-		button:SetWide(300 + (extra / 2))
+		button:SetWide(240 + (extra / 2))
 		button.NumVotes = 0
 
 		self.mapList:AddItem(button)
