@@ -251,7 +251,7 @@ end
 function PANEL:SetMaps(maps)
 	self.mapList:Clear()
 
-	for k, v in maps do
+	for k, v in SortedPairs(maps) do
 		local button = vgui.Create("DButton", self.mapList)
 		button.ID = k
 		button:SetText(v)

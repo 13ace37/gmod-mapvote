@@ -88,7 +88,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
 
 	local amt = 0
 
-	for k, map in maps do
+	for k, map in SortedPairs(maps) do
 		if (not current and game.GetMap():lower() .. ".bsp" == map) then continue end
 		if (cooldown and table.HasValue(recentmaps, map)) then continue end
 
