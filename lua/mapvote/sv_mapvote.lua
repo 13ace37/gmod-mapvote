@@ -55,10 +55,10 @@ function CoolDownDoStuff()
 	file.Write("mapvote/recentmaps.txt", util.TableToJSON(recentmaps))
 end
 
+-- TODO: Remove limit from parameters
 function MapVote.Start(length, current, limit, prefix, callback)
 	current = current or MapVote.Config.AllowCurrentMap or false
 	length = length or MapVote.Config.TimeLimit or 28
-	limit = limit or MapVote.Config.MapLimit or 24
 	cooldown = MapVote.Config.EnableCooldown or MapVote.Config.EnableCooldown == nil and true
 	prefix = prefix or MapVote.Config.MapPrefixes
 	autoGamemode = autoGamemode or MapVote.Config.AutoGamemode or MapVote.Config.AutoGamemode == nil and true
@@ -88,8 +88,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
 
 	local amt = 0
 
-	for k, map in RandomPairs(maps) do
-		local mapstr = map:sub(1, -5):lower()
+	for k, map in maps do
 		if (not current and game.GetMap():lower() .. ".bsp" == map) then continue end
 		if (cooldown and table.HasValue(recentmaps, map)) then continue end
 
@@ -107,8 +106,6 @@ function MapVote.Start(length, current, limit, prefix, callback)
 				end
 			end
 		end
-
-		if (limit and amt >= limit) then break end
 	end
 
 	net.Start("RAM_MapVoteStart")
