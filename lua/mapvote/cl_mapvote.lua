@@ -300,7 +300,7 @@ function PANEL:SetMaps(maps)
 		local extra = math.Clamp(300, 0, ScrW() - 640)
 
 		button:SetDrawBackground(false)
-		button:SetTall(56) -- Increased height
+		button:SetTall(120)
 		button:SetWide(600 + extra)
 		button.NumVotes = 0
 
