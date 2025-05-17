@@ -256,6 +256,11 @@ function PANEL:SetMaps(maps)
 		button.ID = k
 		button:SetText("")
 
+		-- Extract map name: remove prefix and _sh4rk5 suffix
+		local mapName = v
+		mapName = string.gsub(mapName, "^%w+_", "") -- remove prefix (e.g., ttt_)
+		mapName = string.gsub(mapName, "_sh4rk5$", "") -- remove _sh4rk5 suffix
+
 		local mapIconName = string.gsub(v, "_sh4rk5$", "")
 		local iconPath = "maps/thumb/" .. mapIconName .. ".png"
 		if ULib and ULib.fileExists(iconPath) then
@@ -263,7 +268,8 @@ function PANEL:SetMaps(maps)
 		else
 			button.MapIcon = Material("maps/thumb/noicon.png", "noclamp smooth")
 		end
-		button.MapName = v
+
+		button.MapName = mapName
 
 		button.DoClick = function()
 			net.Start("RAM_MapVoteUpdate")
