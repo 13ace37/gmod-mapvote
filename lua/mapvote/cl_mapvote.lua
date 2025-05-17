@@ -139,17 +139,15 @@ function PANEL:PerformLayout()
 	self:SetPos(0, 0)
 	self:SetSize(ScrW(), ScrH())
 
-	local extra = math.Clamp(300, 0, ScrW() - 640)
-	self.Canvas:StretchToParent(0, 0, 0, 0)
-	self.Canvas:SetWide(640 + extra)
-	self.Canvas:SetTall(cy - 60)
-	self.Canvas:SetPos(0, 0)
-	self.Canvas:CenterHorizontal()
+	-- Set Canvas to full height, width minus 500px (250px margin each side)
+	local margin = 250
+	self.Canvas:SetPos(margin, 0)
+	self.Canvas:SetSize(ScrW() - margin * 2, ScrH())
 	self.Canvas:SetZPos(0)
 
 	self.mapList:StretchToParent(0, 90, 0, 0)
 
-	local buttonPos = 640 + extra - 31 * 3
+	local buttonPos = self.Canvas:GetWide() - 31 * 3
 
 	self.closeButton:SetPos(buttonPos - 31 * 0, 4)
 	self.closeButton:SetSize(31, 31)
