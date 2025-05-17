@@ -251,6 +251,8 @@ end
 function PANEL:SetMaps(maps)
 	self.mapList:Clear()
 
+	self.mapList:EnableHorizontal(false) -- Ensure single column
+
 	for k, v in SortedPairs(maps) do
 		local button = vgui.Create("DButton", self.mapList)
 		button.ID = k
@@ -286,7 +288,7 @@ function PANEL:SetMaps(maps)
 
 		button:SetDrawBackground(false)
 		button:SetTall(24)
-		button:SetWide(285 + (extra / 2))
+		button:SetWide(600 + extra)
 		button.NumVotes = 0
 
 		self.mapList:AddItem(button)
