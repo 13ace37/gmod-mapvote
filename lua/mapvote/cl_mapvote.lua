@@ -251,12 +251,21 @@ end
 function PANEL:SetMaps(maps)
 	self.mapList:Clear()
 
-	self.mapList:EnableHorizontal(false) -- Ensure single column
+	self.mapList:EnableHorizontal(false)
 
 	for k, v in SortedPairs(maps) do
 		local button = vgui.Create("DButton", self.mapList)
 		button.ID = k
-		button:SetText(v)
+		button:SetText("")
+
+		local mapIconName = string.gsub(v, "_sh4rk5$", "")
+		local iconPath = "maps/thumb/" .. mapIconName .. ".png"
+		if ULib and ULib.fileExists(iconPath) then
+			button.MapIcon = Material(iconPath, "noclamp smooth")
+		else
+			button.MapIcon = Material("maps/thumb/noicon.png", "noclamp smooth")
+		end
+		button.MapName = v
 
 		button.DoClick = function()
 			net.Start("RAM_MapVoteUpdate")
@@ -266,16 +275,20 @@ function PANEL:SetMaps(maps)
 		end
 
 		do
-			local Paint = button.Paint
 			button.Paint = function(s, w, h)
 				local col = Color(255, 255, 255, 10)
+				if (button.bgColor) then col = button.bgColor end
+				draw.RoundedBox(4, 0, 0, w, h, col)
 
-				if (button.bgColor) then
-					col = button.bgColor
+				-- Draw map icon
+				surface.SetDrawColor(255, 255, 255, 255)
+				if button.MapIcon then
+					surface.SetMaterial(button.MapIcon)
+					surface.DrawTexturedRect(8, 8, h - 16, h - 16)
 				end
 
-				draw.RoundedBox(4, 0, 0, w, h, col)
-				Paint(s, w, h)
+				-- Draw map name
+				draw.SimpleText(button.MapName, "RAM_VoteFont", h, h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
 		end
 
@@ -287,7 +300,7 @@ function PANEL:SetMaps(maps)
 		local extra = math.Clamp(300, 0, ScrW() - 640)
 
 		button:SetDrawBackground(false)
-		button:SetTall(24)
+		button:SetTall(56) -- Increased height
 		button:SetWide(600 + extra)
 		button.NumVotes = 0
 
