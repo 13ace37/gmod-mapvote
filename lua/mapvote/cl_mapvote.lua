@@ -301,7 +301,7 @@ function PANEL:SetMaps(maps)
 
 		button:SetDrawBackground(false)
 		button:SetTall(120)
-		button:SetWide(600 + extra)
+		button:SetWide(300 + (extra / 2))
 		button.NumVotes = 0
 
 		self.mapList:AddItem(button)
