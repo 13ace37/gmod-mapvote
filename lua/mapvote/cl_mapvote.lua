@@ -251,8 +251,6 @@ end
 function PANEL:SetMaps(maps)
 	self.mapList:Clear()
 
-	self.mapList:EnableHorizontal(false)
-
 	for k, v in SortedPairs(maps) do
 		local button = vgui.Create("DButton", self.mapList)
 		button.ID = k
