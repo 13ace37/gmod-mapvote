@@ -27,14 +27,14 @@ net.Receive("RAM_MapVoteUpdate", function(len, ply)
 	end
 end)
 
-if file.Exists("mapvote/recentmaps.txt", "DATA") then
-	recentmaps = util.JSONToTable(file.Read("mapvote/recentmaps.txt", "DATA"))
+if file.Exists("mapvote/recentmaps.json", "DATA") then
+	recentmaps = util.JSONToTable(file.Read("mapvote/recentmaps.json", "DATA"))
 else
 	recentmaps = {}
 end
 
-if file.Exists("mapvote/config.txt", "DATA") then
-	MapVote.Config = util.JSONToTable(file.Read("mapvote/config.txt", "DATA"))
+if file.Exists("mapvote/config.json", "DATA") then
+	MapVote.Config = util.JSONToTable(file.Read("mapvote/config.json", "DATA"))
 else
 	MapVote.Config = {}
 end
@@ -52,7 +52,7 @@ function CoolDownDoStuff()
 		table.insert(recentmaps, 1, curmap)
 	end
 
-	file.Write("mapvote/recentmaps.txt", util.TableToJSON(recentmaps))
+	file.Write("mapvote/recentmaps.json", util.TableToJSON(recentmaps))
 end
 
 -- TODO: Remove limit from parameters
@@ -189,12 +189,6 @@ function MapVote.Start(length, current, limit, prefix, callback)
 		end)
 	end)
 end
-
-hook.Add("Shutdown", "RemoveRecentMaps", function()
-	if file.Exists("mapvote/recentmaps.txt", "DATA") then
-		file.Delete("mapvote/recentmaps.txt")
-	end
-end)
 
 function MapVote.Cancel()
 	if MapVote.Allow then
