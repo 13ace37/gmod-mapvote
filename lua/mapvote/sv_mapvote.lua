@@ -39,17 +39,27 @@ else
 	MapVote.Config = {}
 end
 
-function CoolDownDoStuff()
+function UpdateMapCooldown()
 	cooldownnum = MapVote.Config.MapsBeforeRevote or 3
 
-	if table.getn(recentmaps) == cooldownnum then
-		table.remove(recentmaps)
+	local curmap = game.GetMap():lower() .. ".bsp"
+	local now = os.time()
+	local found = false
+
+	for i, v in ipairs(recentmaps) do
+		if v.mapname == curmap then
+			v.lastVoted = now
+			found = true
+			break
+		end
 	end
 
-	local curmap = game.GetMap():lower() .. ".bsp"
+	if not found then
+		table.insert(recentmaps, 1, { mapname = curmap, lastVoted = now })
+	end
 
-	if not table.HasValue(recentmaps, curmap) then
-		table.insert(recentmaps, 1, curmap)
+	while #recentmaps > cooldownnum do
+		table.remove(recentmaps)
 	end
 
 	file.Write("mapvote/recentmaps.json", util.TableToJSON(recentmaps))
@@ -90,7 +100,14 @@ function MapVote.Start(length, current, limit, prefix, callback)
 
 	for k, map in SortedPairs(maps) do
 		if (not current and game.GetMap():lower() .. ".bsp" == map) then continue end
-		if (cooldown and table.HasValue(recentmaps, map)) then continue end
+		local isRecent = false
+		for _, v in ipairs(recentmaps) do
+			if v.mapname == map then
+				isRecent = true
+				break
+			end
+		end
+		if (cooldown and isRecent) then continue end
 
 		if is_expression then
 			if (string.find(map, prefix)) then -- This might work (from gamemode.txt)
@@ -142,7 +159,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
 			end
 		end
 
-		CoolDownDoStuff()
+		UpdateMapCooldown()
 
 		local winner = table.GetWinningKey(map_results) or 1
 
